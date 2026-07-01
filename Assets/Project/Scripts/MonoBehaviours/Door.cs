@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable
 {
+    [SerializeField] private StatesBlackboard statesBlackboard;
     private bool doorState = false;
 
     public void Interact()
     {
+        if (!statesBlackboard.Get<bool>("has_key"))
+            return;
+
         doorState = !doorState;
 
         if (doorState)
@@ -16,9 +20,12 @@ public class Door : MonoBehaviour, IInteractable
 
     public string GetInteractPrompt()
     {
+        if (!statesBlackboard.Get<bool>("has_key"))
+            return "Its locked. Need the key.";
+
         if (doorState)
-            return "Interact to close the door";
+            return "Close";
         else
-            return "Interact to open the door";
+            return "Open";
     }
 }

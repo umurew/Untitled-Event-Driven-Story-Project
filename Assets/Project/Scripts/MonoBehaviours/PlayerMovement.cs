@@ -4,9 +4,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float sprintSpeed = 8f;
-    [SerializeField] private float jumpHeight = 2f;
+
+    [SerializeField] private bool jumpAllowed = false;
+    [SerializeField] private float jumpHeight = 1f;
+    [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float gravity = -9.81f;
 
     private CharacterController characterController;
@@ -24,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // Handle move input
+        // Handle horizontal movement
         Vector2 moveInput = InputManager.Instance.playerActions.Move.ReadValue<Vector2>();
 
         Vector3 forward = cameraTransform.forward;
@@ -36,8 +37,6 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         Vector3 horizontalVelocity = forward * moveInput.y + right * moveInput.x;
-        Vector3 finalVelocity;
-
 
         // Handle ground check and gravity
         if (characterController.isGrounded)
@@ -47,19 +46,15 @@ public class PlayerMovement : MonoBehaviour
             if (verticalVelocity < 0f)
                 verticalVelocity = -2f;
 
-            // Handle jump input
-            if (InputManager.Instance.playerActions.Jump.WasPressedThisFrame())
+            // Handle jump input if enabled
+            if (jumpAllowed && InputManager.Instance.playerActions.Jump.WasPressedThisFrame())
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         else
             verticalVelocity += gravity * Time.deltaTime;
 
-        // Handle sprinting
-        if (InputManager.Instance.playerActions.Sprint.IsInProgress())
-            finalVelocity = sprintSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
-        else
-            finalVelocity = moveSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
-
+        // Apply final velocity
+        Vector3 finalVelocity = moveSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 }

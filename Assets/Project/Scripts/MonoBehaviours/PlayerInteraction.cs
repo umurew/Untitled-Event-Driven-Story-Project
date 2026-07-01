@@ -39,7 +39,10 @@ public class PlayerInteraction : MonoBehaviour
         PerformInteractionCheck();
 
         if (currentInteractable != null && InputManager.Instance.playerActions.Interact.WasPressedThisFrame())
+        {
             currentInteractable.Interact();
+            UpdatePrompt();
+        }
     }
 
     private void PerformInteractionCheck()
@@ -72,17 +75,18 @@ public class PlayerInteraction : MonoBehaviour
     private void ShowPrompt()
     {
         if (interactionPromptLabel == null || currentInteractable == null)
+        {
+            Debug.LogError("Visual element \"InteractionPromptLabel\" or IInteractable \"currentInteractable\" was null.");
             return;
+        }
 
-        interactionPromptLabel.text = currentInteractable.GetInteractPrompt();
-
-        interactionPromptLabel.style.display = DisplayStyle.Flex;
+        UpdatePrompt();
+        interactionPromptLabel.style.visibility = Visibility.Visible;
     }
 
-    private void HidePrompt()
-    {
-        interactionPromptLabel.style.display = DisplayStyle.None;
-    }
+    private void HidePrompt() => interactionPromptLabel.style.visibility = Visibility.Hidden;
+
+    private void UpdatePrompt() => interactionPromptLabel.text = currentInteractable.GetInteractPrompt();
 
     private void OnDrawGizmosSelected()
     {
