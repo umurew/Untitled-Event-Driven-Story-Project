@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 8f;
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -9.81f;
 
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         Vector3 horizontalVelocity = forward * moveInput.y + right * moveInput.x;
+        Vector3 finalVelocity;
 
 
         // Handle ground check and gravity
@@ -52,7 +54,12 @@ public class PlayerMovement : MonoBehaviour
         else
             verticalVelocity += gravity * Time.deltaTime;
 
-        Vector3 finalVelocity = moveSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
+        // Handle sprinting
+        if (InputManager.Instance.playerActions.Sprint.IsInProgress())
+            finalVelocity = sprintSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
+        else
+            finalVelocity = moveSpeed * horizontalVelocity + Vector3.up * verticalVelocity;
+
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 }

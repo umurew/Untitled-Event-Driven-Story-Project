@@ -19,7 +19,7 @@ public class PlayerInteraction : MonoBehaviour
         // Check if interactable exists
         PerformInteractionCheck();
 
-        if (currentInteractable != null && Input.GetKeyDown(KeyCode.E))
+        if (currentInteractable != null && InputManager.Instance.playerActions.Interact.WasPressedThisFrame())
             currentInteractable.Interact();
     }
 
@@ -40,10 +40,9 @@ public class PlayerInteraction : MonoBehaviour
                 currentInteractable = iinteractable;
                 return;
             }
-
-            currentInteractable = null;
-            return;
         }
+
+        currentInteractable = null;
     }
 
     private void OnDrawGizmos()
