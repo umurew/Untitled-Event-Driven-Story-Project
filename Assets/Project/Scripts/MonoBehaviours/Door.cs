@@ -11,11 +11,14 @@ public class Door : MonoBehaviour, IInteractable
         if (doorState)
             Debug.Log("OPENED");
         else
-            Debug.LogError("CLOSED");
+            Debug.Log("CLOSED");
     }
 
     public string GetInteractPrompt()
     {
-        return string.Empty;
+        if (doorState)
+            return "Interact to close the door";
+        else
+            return "Interact to open the door";
     }
 }

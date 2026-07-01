@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="HUD_StyleSheet.uss" />
+
+    <ui:VisualElement name="HUDContainer" class="hud-container">
+        <ui:VisualElement name="Crosshair" class="crosshair" />
+        <ui:Label name="InteractionPromptLabel" class="prompt-label" text="Null" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -12,7 +13,25 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private float raycastRadius = 0.2f;
     [SerializeField] private LayerMask interactableLayer;
 
+    [Header("UI References")]
+    [SerializeField] private UIDocument hudDocument;
+
     private IInteractable currentInteractable;
+    private Label interactionPromptLabel;
+
+    private void Start()
+    {
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
+
+        if (hudDocument != null)
+        {
+            VisualElement root = hudDocument.rootVisualElement;
+            interactionPromptLabel = root.Q<Label>("InteractionPromptLabel");
+
+            HidePrompt();
+        }
+    }
 
     private void Update()
     {
@@ -26,9 +45,8 @@ public class PlayerInteraction : MonoBehaviour
     private void PerformInteractionCheck()
     {
         Ray ray = new(cameraTransform.position, cameraTransform.forward);
-        RaycastHit raycastHit;
 
-        if (Physics.SphereCast(ray, raycastRadius, out raycastHit, raycastDistance, interactableLayer))
+        if (Physics.SphereCast(ray, raycastRadius, out RaycastHit raycastHit, raycastDistance, interactableLayer))
         {
             IInteractable iinteractable = raycastHit.collider.GetComponent<IInteractable>();
 
@@ -38,16 +56,37 @@ public class PlayerInteraction : MonoBehaviour
                     return;
 
                 currentInteractable = iinteractable;
+                ShowPrompt();
+
                 return;
             }
         }
 
-        currentInteractable = null;
+        if (currentInteractable != null)
+        {
+            currentInteractable = null;
+            HidePrompt();
+        }
     }
 
-    private void OnDrawGizmos()
+    private void ShowPrompt()
     {
-        if (cameraTransform is null)
+        if (interactionPromptLabel == null || currentInteractable == null)
+            return;
+
+        interactionPromptLabel.text = currentInteractable.GetInteractPrompt();
+
+        interactionPromptLabel.style.display = DisplayStyle.Flex;
+    }
+
+    private void HidePrompt()
+    {
+        interactionPromptLabel.style.display = DisplayStyle.None;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (cameraTransform == null)
             return;
 
         Gizmos.color = Color.red;
