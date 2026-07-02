@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af0e324a1cf65a84aab17280490086b5, type: 3}
-  m_Name: Level01_StatesBlackboard
+  m_Name: DeveloperScene_StatesBlackboard
   m_EditorClassIdentifier: Assembly-CSharp::StatesBlackboard
