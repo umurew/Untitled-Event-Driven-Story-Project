@@ -15,14 +15,23 @@
 	position: absolute;
 }
 
-.prompt-label {
+.prompt-container {
     position: absolute;
     bottom: 25%;
+	display: flex;
+	flex-direction: column;
+}
+
+.prompt-header {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.prompt-label {
     color: rgb(255, 255, 255);
     font-size: 22px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 8px 20px;
-    border-radius: 6px;
 }

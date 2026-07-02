@@ -3,6 +3,9 @@
 
     <ui:VisualElement name="HUDContainer" class="hud-container">
         <ui:VisualElement name="Crosshair" class="crosshair" />
-        <ui:Label name="InteractionPromptLabel" class="prompt-label" text="Null" />
+        <ui:VisualElement name="PromptLabelContainer" class="prompt-container">
+            <ui:Label name="PromptHeaderlabel" class="prompt-header" text="Prompt Header" />
+            <ui:Label name="PromptLabel" class="prompt-label" text="Prompt Label" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlayerInteraction : MonoBehaviour
@@ -17,7 +18,9 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private UIDocument hudDocument;
 
     private IInteractable currentInteractable;
-    private Label interactionPromptLabel;
+    private VisualElement promptContanier;
+    private Label promptLabel;
+    private Label promptHeaderLabel;
 
     private void Start()
     {
@@ -27,7 +30,9 @@ public class PlayerInteraction : MonoBehaviour
         if (hudDocument != null)
         {
             VisualElement root = hudDocument.rootVisualElement;
-            interactionPromptLabel = root.Q<Label>("InteractionPromptLabel");
+            promptContanier = root.Q<VisualElement>("PromptLabelContainer");
+            promptLabel = root.Q<Label>("PromptLabel");
+            promptHeaderLabel = root.Q<Label>("PromptHeaderlabel");
 
             HidePrompt();
         }
@@ -74,19 +79,23 @@ public class PlayerInteraction : MonoBehaviour
 
     private void ShowPrompt()
     {
-        if (interactionPromptLabel == null || currentInteractable == null)
+        if (currentInteractable == null || promptContanier == null || promptHeaderLabel == null || promptLabel == null)
         {
-            Debug.LogError("Visual element \"InteractionPromptLabel\" or IInteractable \"currentInteractable\" was null.");
+            Debug.LogError("One or more of the visual elements or variable \"currentInteractable\" was null.");
             return;
         }
 
         UpdatePrompt();
-        interactionPromptLabel.style.visibility = Visibility.Visible;
+        promptContanier.style.visibility = Visibility.Visible;
     }
 
-    private void HidePrompt() => interactionPromptLabel.style.visibility = Visibility.Hidden;
+    private void HidePrompt() => promptContanier.style.visibility = Visibility.Hidden;
 
-    private void UpdatePrompt() => interactionPromptLabel.text = currentInteractable.GetInteractPrompt();
+    private void UpdatePrompt()
+    {
+        promptLabel.text = currentInteractable.GetInteractPrompt();
+        promptHeaderLabel.text = $"Press {InputManager.Instance.playerActions.Interact.GetBindingDisplayString()} to Interact";
+    }
 
     private void OnDrawGizmosSelected()
     {

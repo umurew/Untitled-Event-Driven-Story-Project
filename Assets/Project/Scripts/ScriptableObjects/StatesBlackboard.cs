@@ -17,7 +17,7 @@ public class StatesBlackboard : ScriptableObject
         if (StateDictionary.TryGetValue(Key, out object Value))
             return (T)Value;
 
-        Debug.Log($"State with the key \"{Key}\" is being read, read value: {Value}");
+        Debug.Log($"State with the key \"{Key}\" is being read");
         return default;
     }
 
